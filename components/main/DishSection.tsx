@@ -10,19 +10,25 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { BiTrash } from "react-icons/bi"
-
-export function AddDialog() {
+import { IoMdAddCircle } from "react-icons/io"
+type DishesProps = {
+    id: number,
+    title: string,
+}
+export function DishSection({ id, title }: DishesProps) {
     return (
-        <div className="m-auto w-[1170px] flex flex-col gap-4">
+        <div className="m-auto w-[1170px] flex flex-col gap-4 mt-4">
+
             <div className="rounded-xl p-6 bg-white">
-                Category
-            </div>
-            <div className="rounded-xl p-6 bg-white">
+                <h1 className="text-xl font-bold mb-4">{title} (total_dishes_by_category)</h1>
                 <Dialog>
                     <form>
                         <DialogTrigger asChild>
-                            <Button variant="outline" className="px-20 py-40 border-2 border-red-500 border-dashed text-[14px]">
-                                Add new Dish to Appetizers
+                            <Button variant="outline" className="w-[270px] h-[240px] border-2 border-red-500 border-dashed text-[14px]">
+                                <div className="flex flex-col gap-3 items-center">
+                                    <IoMdAddCircle color="red" />
+                                    <p>Add new Dish to {title}</p>
+                                </div>
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[572px]">
