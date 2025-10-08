@@ -9,7 +9,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 type DishesProps = {
     title: string,
     id: string,
@@ -18,6 +18,16 @@ export function DishSection({ title, id }: DishesProps) {
     const [name, setName] = useState<string>("");
     const [price, setPrice] = useState<number>(0);
     const [ingredients, setIngredients] = useState<string>("");
+    const [foods, setFoods] = useState<string[]>([]);
+    async function getFoods() {
+        const result = await fetch("http://localhost:4000/foods");
+        const responseData = await result.json();
+        setFoods(responseData);
+    }
+
+    useEffect(() => {
+        getFoods()
+    }, [])
     function addFoodHandler() {
         fetch('http://localhost:4000/create-food', {
             method: "POST",
@@ -25,9 +35,9 @@ export function DishSection({ title, id }: DishesProps) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                ingredients,
-                price,
-                name,
+                ingredients: ingredients,
+                price: price,
+                name: name,
             }),
         })
     }
@@ -63,7 +73,7 @@ export function DishSection({ title, id }: DishesProps) {
                                 <div className="flex justify-between gap-10">
                                     <div className="flex flex-col w-fit">
                                         <p className="font-semibold mb-2">Food Name</p>
-                                        <Input id="name" name="name" placeholder="Type food name" defaultValue={name} value={name} onChange={nameChangeHandler} />
+                                        <Input id="name" name="name" type="text" placeholder="Type food name" defaultValue="Food" value={name} onChange={nameChangeHandler} />
                                     </div>
                                     <div className="flex-1">
                                         <p className="font-semibold mb-2">Food price</p>

@@ -14,6 +14,19 @@ import { Input } from "../ui/input"
 export function DishCategory() {
     const [categories, setCategories] = useState<string[]>([]);
     const [name, setName] = useState<string>("");
+    async function createNewCategory() {
+        await fetch("http://localhost:4000/categories", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name }),
+        });
+        await getCategories()
+    }
+    function categoryNameChangeHandler(e: ChangeEvent<HTMLInputElement>) {
+        setName(e.target.value)
+    }
     async function getCategories() {
         const result = await fetch("http://localhost:4000/categories");
         const responseData = await result.json();
@@ -23,19 +36,7 @@ export function DishCategory() {
     useEffect(() => {
         getCategories()
     }, [])
-    async function createNewCategory() {
-        await fetch("http://localhost:4000/categories", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ name }),
-        });
-        getCategories()
-    }
-    function categoryNameChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-        setName(e.target.value)
-    }
+
     return (
         <div className="m-auto w-[1170px] flex flex-col gap-4 mt-4">
 
@@ -58,7 +59,7 @@ export function DishCategory() {
                                 </DialogHeader>
                                 <div className="grid gap-4 mt-6">
                                     <p className="font-semibold"> Category name</p>
-                                    <Input placeholder="Type category name..." defaultValue={name} value={name} onChange={categoryNameChangeHandler} />
+                                    <Input type="text" placeholder="Type category name..." value={name} onChange={categoryNameChangeHandler} />
                                 </div>
                                 <DialogFooter>
                                     <Button className="px-10 py-5 mt-12" type="submit" onClick={createNewCategory}>Add category</Button>
