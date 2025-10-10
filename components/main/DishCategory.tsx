@@ -11,31 +11,53 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "../ui/input"
+import { Badge } from "../ui/badge";
 export function DishCategory() {
     const [categories, setCategories] = useState<string[]>([]);
-    const [name, setName] = useState<string>("");
-    async function createNewCategory() {
-        await fetch("http://localhost:4000/categories", {
+    const [newCategory, setNewCategory] = useState<string | undefined>();
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+    const getCategories = async () => {
+        const result = await fetch("http://localhost:4000/api/categories");
+        const responseData = await result.json();
+        console.log({ responseData });
+        const { data } = responseData;
+        console.log(data);
+        setCategories(data);
+    };
+
+    useEffect(() => {
+        getCategories();
+    }, []);
+
+    const newCategoryNameChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewCategory(e.target.value);
+    };
+    const createCategoryHandler = async () => {
+        await fetch("http://localhost:4000/api/categories", {
             method: "POST",
+            mode: "no-cors",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ name }),
+            body: JSON.stringify({
+                newCategory,
+            }),
         });
-        await getCategories()
-    }
-    function categoryNameChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-        setName(e.target.value)
-    }
-    async function getCategories() {
-        const result = await fetch("http://localhost:4000/categories");
-        const responseData = await result.json();
-        setCategories(responseData);
-    }
+        setModalOpen(false);
+        await getCategories();
+    };
 
-    useEffect(() => {
-        getCategories()
-    }, [])
+    const deleteCategoryHandler = async (category: string) => {
+        await fetch("http://localhost:4000/api/categories/delete", {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(category),
+        });
+    };
 
     return (
         <div className="m-auto w-[1170px] flex flex-col gap-4 mt-4">
@@ -44,7 +66,7 @@ export function DishCategory() {
                 <h1 className="text-xl font-bold mb-4">Dish Categories</h1>
                 <div className="flex items-center gap-2 flex-wrap">
                     {categories.map((category) => (
-                        <Button key={category}>{category}</Button>
+                        <Badge className="px-3 py-1" key={category}>{category}</Badge>
                     ))}
                     <Dialog>
                         <form>
@@ -59,10 +81,10 @@ export function DishCategory() {
                                 </DialogHeader>
                                 <div className="grid gap-4 mt-6">
                                     <p className="font-semibold"> Category name</p>
-                                    <Input type="text" placeholder="Type category name..." value={name} onChange={categoryNameChangeHandler} />
+                                    <Input type="text" placeholder="Type category name..." onChange={newCategoryNameChangeHandler} />
                                 </div>
                                 <DialogFooter>
-                                    <Button className="px-10 py-5 mt-12" type="submit" onClick={createNewCategory}>Add category</Button>
+                                    <Button className="px-10 py-5 mt-12" type="submit" onClick={createCategoryHandler}>Add category</Button>
                                 </DialogFooter>
                             </DialogContent>
                         </form>
