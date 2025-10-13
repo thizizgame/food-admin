@@ -1,7 +1,6 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 
-import { ChangeEvent, useEffect, useState } from "react";
-import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -9,11 +8,15 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "../ui/input"
-import { Badge } from "../ui/badge";
-export function DishCategory() {
-    const [categories, setCategories] = useState<string[]>([]);
+} from "@/components/ui/dialog";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CategoryType } from "@/types";
+
+
+export default function DishCategory() {
+    const [categories, setCategories] = useState<CategoryType[]>([]);
     const [newCategory, setNewCategory] = useState<string | undefined>();
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -22,7 +25,7 @@ export function DishCategory() {
         const responseData = await result.json();
         console.log({ responseData });
         const { data } = responseData;
-        console.log(data);
+        console.log(data, "data");
         setCategories(data);
     };
 
@@ -66,7 +69,7 @@ export function DishCategory() {
                 <h1 className="text-xl font-bold mb-4">Dish Categories</h1>
                 <div className="flex items-center gap-2 flex-wrap">
                     {categories.map((category) => (
-                        <Badge className="px-3 py-1" key={category}>{category}</Badge>
+                        <Badge className="px-3 py-1" key={category._id}>{category.name}</Badge>
                     ))}
                     <Dialog>
                         <form>
