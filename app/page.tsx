@@ -9,7 +9,7 @@ export default function Home() {
       <DishSection id="1" title="Appetizers" />
       <DishSection id="2" title="Salad" />
       <DishSection id="3" title="Pizzas" />
-      <DishSection id="4" title="Lunch Favorites" />
+       <DishSection id="4" title="Lunch Favorites" />
     </AdminLayout>
   );
 }
