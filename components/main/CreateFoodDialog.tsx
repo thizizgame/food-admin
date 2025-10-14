@@ -88,7 +88,7 @@ export const CreateFoodDialog = () => {
     };
     return (
 
-        <div>
+        <div className="flex flex-wrap gap-2">
             <Dialog>
                 <DialogTrigger asChild>
                     <Button variant="outline" className="w-[270px] h-[240px] border-2 border-red-500 border-dashed text-[14px]">
@@ -159,11 +159,16 @@ export const CreateFoodDialog = () => {
                 </DialogContent>
             </Dialog>
             {food.map((food) => (
-                <Badge className="px-3 py-1" key={food.foodName}>Name:{food.foodName}
-                    Ingredients:{food.ingredients} Price:{food.price}</Badge>
+                <div className="w-69 border-1 rounded-xl" key={food.foodName}>
+                    <img src={food.image} className="w-full rounded-xl h-40" />
+                    <div className="flex justify-between">
+                        <p className="text-[#EF4444] font-semibold">{food.foodName}</p>
+                        <p>{food.price} $</p>
+                    </div>
+                    <p>{food.ingredients}</p>
+                    <p>{food.category}</p>
+                </div>
             ))}
         </div>
-
-
     );
 };

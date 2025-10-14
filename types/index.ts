@@ -5,7 +5,7 @@ export type CategoryType = {
 export type FoodType = {
     foodName: string;
     price: number;
-    image?: string;
+    image: File | undefined;
     ingredients: string;
-    category?: CategoryType[];
+    category: string;
 }
