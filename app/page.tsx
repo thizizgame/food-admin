@@ -20,11 +20,13 @@ export default function Home() {
   return (
     <AdminLayout>
       <DishCategory />
-      <div className="m-auto w-[1170px] flex gap-2 rounded-xl p-6 bg-white mt-4">
+      <div className="m-auto w-[1170px] flex flex-wrap gap-2 rounded-xl p-6 bg-white mt-4">
         <CreateFoodDialog />
         {food.map((food) => (
           <div className="w-69 border-1 rounded-xl" key={food.foodName}>
+
             <img src={food.image} className="w-full rounded-xl h-40" />
+
             <div className="flex justify-between">
               <p className="text-[#EF4444] font-semibold">{food.foodName}</p>
               <p>{food.price} $</p>
